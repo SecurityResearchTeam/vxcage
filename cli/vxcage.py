@@ -29,6 +29,26 @@ import os
 import sys
 import getpass
 import argparse
+import readline 
+import rlcompleter 
+import atexit 
+import glob
+
+# tab completion 
+def complete(text, state):
+    return (glob.glob(text+'*')+[None])[state]
+readline.set_completer_delims(' \t\n;')
+readline.parse_and_bind("tab: complete")
+readline.set_completer(complete) 
+
+# history file 
+histfile = os.path.join(os.environ['HOME'], '.pythonhistory') 
+try: 
+    readline.read_history_file(histfile) 
+except IOError: 
+    pass 
+atexit.register(readline.write_history_file, histfile) 
+del os, histfile, readline, rlcompleter
 
 try:
     import requests
